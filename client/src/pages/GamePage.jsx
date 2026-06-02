@@ -42,19 +42,35 @@ export default function GamePage({ initialRoom, nickname, onGameEnd }) {
         setTimeout(() => setFlash(false), 600)
         showNotif(`💔 라이프 -1 (${r.gameState.life}개 남음)`, 'red')
       }
+      // cardPlayed에서 즉시 처리 (roundClear 이벤트 누락 방지)
+      if (roundResult === 'roundClear') {
+        const round = r.gameState.round
+        const nextRoundNum = round + 1
+        const rewardNext =
+          [3, 7, 11].includes(nextRoundNum) ? 'shuriken' :
+          [5, 9].includes(nextRoundNum) ? 'life' : null
+        setRoundClearMsg({ round, reward: rewardNext })
+        setTimeout(() => {
+          setRoundClearMsg(null)
+          socket.emit('nextRound', { code: r.code })
+        }, 2500)
+      }
     })
 
     socket.on('roundClear', ({ round }) => {
-      const nextRoundNum = round + 1
-      const rewardNext =
-        [3, 7, 11].includes(nextRoundNum) ? 'shuriken' :
-        [5, 9].includes(nextRoundNum) ? 'life' : null
-      setRoundClearMsg({ round, reward: rewardNext })
-      // 2.5초 오버레이 후 클라이언트가 직접 nextRound 요청
-      setTimeout(() => {
-        setRoundClearMsg(null)
-        socket.emit('nextRound', { code: room.code })
-      }, 2500)
+      // cardPlayed에서 이미 처리됐으면 중복 실행 방지
+      setRoundClearMsg(prev => {
+        if (prev) return prev // 이미 오버레이가 뜬 경우 무시
+        const nextRoundNum = round + 1
+        const rewardNext =
+          [3, 7, 11].includes(nextRoundNum) ? 'shuriken' :
+          [5, 9].includes(nextRoundNum) ? 'life' : null
+        setTimeout(() => {
+          setRoundClearMsg(null)
+          socket.emit('nextRound', { code: room.code })
+        }, 2500)
+        return { round, reward: rewardNext }
+      })
     })
 
     socket.on('roundStarted', ({ room: r, reward }) => {

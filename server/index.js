@@ -86,7 +86,10 @@ io.on('connection', (socket) => {
     if (gameOver) {
       io.to(code).emit('gameOver', { message: '라이프가 모두 소진되었습니다.' });
     } else if (roundResult === 'roundClear') {
-      io.to(code).emit('roundClear', { round: room.gameState.round });
+      // io.to(code) 대신 각 플레이어에게 직접 전송 (더 안정적)
+      room.players.forEach(p => {
+        io.to(p.id).emit('roundClear', { round: room.gameState.round });
+      });
     }
   });
 
