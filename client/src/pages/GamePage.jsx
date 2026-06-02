@@ -33,7 +33,7 @@ export default function GamePage({ initialRoom, nickname, onGameEnd }) {
   }
 
   useEffect(() => {
-    socket.on('cardPlayed', ({ room: r, mistake }) => {
+    socket.on('cardPlayed', ({ room: r, mistake, roundResult }) => {
       setRoom(r)
       if (mistake) {
         setShake(true)
@@ -42,15 +42,25 @@ export default function GamePage({ initialRoom, nickname, onGameEnd }) {
         setTimeout(() => setFlash(false), 600)
         showNotif(`💔 라이프 -1 (${r.gameState.life}개 남음)`, 'red')
       }
+      // 카드 플레이 결과에서 직접 라운드 클리어 처리
+      if (roundResult === 'roundClear') {
+        const round = r.gameState.round
+        const nextRound = round + 1
+        const rewardNext =
+          [3, 7, 11].includes(nextRound) ? 'shuriken' :
+          [5, 9].includes(nextRound) ? 'life' : null
+        setRoundClearMsg({ round, reward: rewardNext })
+        setTimeout(() => setRoundClearMsg(null), 2500)
+      }
     })
 
     socket.on('roundClear', ({ round }) => {
+      // cardPlayed에서 이미 처리하지만 혹시 모를 경우 대비
       const nextRound = round + 1
       const rewardNext =
         [3, 7, 11].includes(nextRound) ? 'shuriken' :
         [5, 9].includes(nextRound) ? 'life' : null
-      setRoundClearMsg({ round, reward: rewardNext })
-      // 서버가 자동으로 다음 라운드 처리 — 2.5초 후 오버레이만 닫기
+      setRoundClearMsg(prev => prev || { round, reward: rewardNext })
       setTimeout(() => setRoundClearMsg(null), 2500)
     })
 
