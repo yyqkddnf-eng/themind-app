@@ -45,16 +45,13 @@ export default function GamePage({ initialRoom, nickname, onGameEnd }) {
     })
 
     socket.on('roundClear', ({ round }) => {
-      // 다음 라운드가 보상 라운드인지 미리 계산
       const nextRound = round + 1
       const rewardNext =
         [3, 7, 11].includes(nextRound) ? 'shuriken' :
         [5, 9].includes(nextRound) ? 'life' : null
       setRoundClearMsg({ round, reward: rewardNext })
-      setTimeout(() => {
-        setRoundClearMsg(null)
-        socket.emit('nextRound', { code: room.code })
-      }, 2500)
+      // 서버가 자동으로 다음 라운드 처리 — 2.5초 후 오버레이만 닫기
+      setTimeout(() => setRoundClearMsg(null), 2500)
     })
 
     socket.on('roundStarted', ({ room: r, reward }) => {

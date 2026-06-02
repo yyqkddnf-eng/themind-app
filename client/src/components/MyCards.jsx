@@ -5,9 +5,13 @@ export default function MyCards({ cards, onPlay, onHighlight }) {
   const holdTimers = useRef({})
   const currentLevel = useRef(0)
 
+  const touchStartY = useRef({})
+
   function handleHoldStart(card, e) {
     e.preventDefault()
     currentLevel.current = 0
+    // 터치 시작 위치 기록 (스크롤 감지용)
+    if (e.touches) touchStartY.current[card] = e.touches[0].clientY
     holdTimers.current[card] = setTimeout(() => {
       currentLevel.current = 1; setHighlightLevel(1); onHighlight(1)
       holdTimers.current[card + '_2'] = setTimeout(() => {
@@ -19,25 +23,31 @@ export default function MyCards({ cards, onPlay, onHighlight }) {
     }, 1000)
   }
 
-  // 카드 제출 (mouseup / touchend 전용)
-  function handleHoldEnd(card) {
+  function cancelTimers(card) {
     clearTimeout(holdTimers.current[card])
     clearTimeout(holdTimers.current[card + '_2'])
     clearTimeout(holdTimers.current[card + '_3'])
-    if (currentLevel.current === 0) onPlay(card)
     setHighlightLevel(0)
     onHighlight(0)
     currentLevel.current = 0
   }
 
-  // 마우스가 카드 밖으로 나갈 때 — 제출하지 않고 타이머만 취소
+  // 카드 제출 — 스크롤이면 무시
+  function handleHoldEnd(card, e) {
+    // 터치로 10px 이상 이동했으면 스크롤로 간주, 제출 취소
+    if (e?.changedTouches && touchStartY.current[card] !== undefined) {
+      const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current[card])
+      delete touchStartY.current[card]
+      if (dy > 10) { cancelTimers(card); return }
+    }
+    const shouldPlay = currentLevel.current === 0
+    cancelTimers(card)
+    if (shouldPlay) onPlay(card)
+  }
+
+  // 마우스가 카드 밖으로 나갈 때 — 제출 안 함
   function handleMouseLeave(card) {
-    clearTimeout(holdTimers.current[card])
-    clearTimeout(holdTimers.current[card + '_2'])
-    clearTimeout(holdTimers.current[card + '_3'])
-    setHighlightLevel(0)
-    onHighlight(0)
-    currentLevel.current = 0
+    cancelTimers(card)
   }
 
   const glowClass =

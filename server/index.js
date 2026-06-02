@@ -86,22 +86,26 @@ io.on('connection', (socket) => {
     if (gameOver) {
       io.to(code).emit('gameOver', { message: '라이프가 모두 소진되었습니다.' });
     } else if (roundResult === 'roundClear') {
-      io.to(code).emit('roundClear', { round: room.gameState.round });
+      const clearedRound = room.gameState.round;
+      io.to(code).emit('roundClear', { round: clearedRound });
+      // 서버에서 2.5초 후 자동으로 다음 라운드 시작 (클라이언트 중복 호출 방지)
+      setTimeout(() => {
+        const result = gm.nextRound(code);
+        if (!result) return;
+        const { room: newRoom, victory, reward } = result;
+        if (victory) {
+          io.to(code).emit('victory', {});
+        } else {
+          newRoom.players.forEach(p => {
+            io.to(p.id).emit('roundStarted', { room: gm.getRoomForPlayer(code, p.id), reward });
+          });
+        }
+      }, 2500);
     }
   });
 
-  socket.on('nextRound', ({ code }) => {
-    const result = gm.nextRound(code);
-    if (!result) return;
-    const { room, victory, reward } = result;
-    if (victory) {
-      io.to(code).emit('victory', { message: '모든 라운드를 클리어했습니다!' });
-    } else {
-      room.players.forEach(p => {
-        io.to(p.id).emit('roundStarted', { room: gm.getRoomForPlayer(code, p.id), reward });
-      });
-    }
-  });
+  // nextRound는 서버가 자동 처리하므로 클라이언트 요청 무시
+  socket.on('nextRound', () => {});
 
   socket.on('requestShuriken', ({ code }) => {
     const room = gm.initShurikenVote(code, socket.id);
