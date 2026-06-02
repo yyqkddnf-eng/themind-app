@@ -19,11 +19,22 @@ export default function MyCards({ cards, onPlay, onHighlight }) {
     }, 1000)
   }
 
-  function handleHoldEnd(card, e) {
+  // 카드 제출 (mouseup / touchend 전용)
+  function handleHoldEnd(card) {
     clearTimeout(holdTimers.current[card])
     clearTimeout(holdTimers.current[card + '_2'])
     clearTimeout(holdTimers.current[card + '_3'])
     if (currentLevel.current === 0) onPlay(card)
+    setHighlightLevel(0)
+    onHighlight(0)
+    currentLevel.current = 0
+  }
+
+  // 마우스가 카드 밖으로 나갈 때 — 제출하지 않고 타이머만 취소
+  function handleMouseLeave(card) {
+    clearTimeout(holdTimers.current[card])
+    clearTimeout(holdTimers.current[card + '_2'])
+    clearTimeout(holdTimers.current[card + '_3'])
     setHighlightLevel(0)
     onHighlight(0)
     currentLevel.current = 0
@@ -47,10 +58,10 @@ export default function MyCards({ cards, onPlay, onHighlight }) {
           <button
             key={card}
             onTouchStart={e => handleHoldStart(card, e)}
-            onTouchEnd={e => handleHoldEnd(card, e)}
+            onTouchEnd={() => handleHoldEnd(card)}
             onMouseDown={e => handleHoldStart(card, e)}
-            onMouseUp={e => handleHoldEnd(card, e)}
-            onMouseLeave={e => handleHoldEnd(card, e)}
+            onMouseUp={() => handleHoldEnd(card)}
+            onMouseLeave={() => handleMouseLeave(card)}
             className={`card-premium flex-shrink-0 flex items-center justify-center relative select-none transition-all active:scale-95 ${glowClass}`}
             style={{ width: 56, height: 80 }}
           >
