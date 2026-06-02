@@ -44,12 +44,12 @@ export default function CardTable({ tableCards }) {
             </div>
 
             {/* 낸 사람 닉네임 */}
-            <div className="flex items-center gap-1.5">
-              <div className="w-4 h-4 rounded-full bg-gold-600 flex items-center justify-center text-dark-900 font-bold"
-                style={{ fontSize: 9 }}>
+            <div className="flex items-center gap-1.5 bg-dark-800 rounded-full px-2.5 py-1 border border-dark-600">
+              <div className="w-3.5 h-3.5 rounded-full bg-gold-600 flex items-center justify-center text-dark-900 font-bold shrink-0"
+                style={{ fontSize: 8 }}>
                 {tableCards[tableCards.length - 1].nickname?.[0]}
               </div>
-              <span className="text-gold-400 text-xs font-medium">
+              <span className="text-gold-400 text-xs font-medium leading-none">
                 {tableCards[tableCards.length - 1].nickname}
               </span>
             </div>
@@ -65,7 +65,7 @@ export default function CardTable({ tableCards }) {
                     <span className="text-gold-500 font-bold text-base">{c.value}</span>
                     <span className="absolute top-1 left-1 text-gold-700 text-xs opacity-50">{c.value}</span>
                   </div>
-                  <span className="text-gray-500 text-xs truncate" style={{ maxWidth: 44 }}>
+                  <span className="text-gray-500 text-xs text-center leading-none" style={{ maxWidth: 46, wordBreak: 'keep-all' }}>
                     {c.nickname}
                   </span>
                 </div>
