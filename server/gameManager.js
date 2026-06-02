@@ -160,6 +160,9 @@ function playCard(code, playerId, card) {
 function nextRound(code) {
   const room = rooms.get(code);
   if (!room) return null;
+  // 이미 다음 라운드로 넘어갔으면 중복 처리 방지
+  const totalCards = room.players.reduce((sum, p) => sum + p.cards.length, 0);
+  if (totalCards > 0) return null; // 아직 카드가 남아있으면 무시
 
   room.gameState.round += 1;
 
