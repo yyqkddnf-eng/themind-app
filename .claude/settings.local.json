@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(not exist *)",
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force)",
+      "PowerShell(Start-Process -FilePath \"node\" -ArgumentList \"index.js\" -WorkingDirectory \"D:\\\\workspace\\\\themind_app\\\\server\" -WindowStyle Minimized)"
+    ]
+  }
+}

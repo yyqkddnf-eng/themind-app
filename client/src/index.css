@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  font-family: 'Noto Sans KR', system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100dvh;
+}
+
+#root {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.gold-text {
+  color: #d4af37;
+}
+
+.gold-border {
+  border-color: #d4af37;
+}
+
+/* Card styles */
+.card-premium {
+  background: linear-gradient(145deg, #111111, #1a1a1a);
+  border: 1.5px solid #d4af37;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.card-premium-glow {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.2);
+}
+
+.card-premium-glow-2 {
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.7), 0 0 60px rgba(212, 175, 55, 0.3);
+  animation: pulse-gold 1s ease-in-out infinite;
+}
+
+.card-premium-glow-3 {
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.9), 0 0 80px rgba(212, 175, 55, 0.5);
+  animation: pulse-gold-intense 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.7), 0 0 60px rgba(212, 175, 55, 0.3); }
+  50% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.9), 0 0 90px rgba(212, 175, 55, 0.5); }
+}
+
+@keyframes pulse-gold-intense {
+  0%, 100% { box-shadow: 0 0 40px rgba(212, 175, 55, 1), 0 0 80px rgba(212, 175, 55, 0.6); }
+  50% { box-shadow: 0 0 60px rgba(212, 175, 55, 1), 0 0 120px rgba(212, 175, 55, 0.8); }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.flash-red {
+  animation: flashRed 0.6s ease-out;
+}
+
+@keyframes flashRed {
+  0% { background-color: rgba(255, 50, 50, 0.3); }
+  100% { background-color: transparent; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.card-deal {
+  animation: cardDeal 0.4s ease-out;
+}
+
+@keyframes cardDeal {
+  from { transform: translateY(40px) scale(0.8); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
