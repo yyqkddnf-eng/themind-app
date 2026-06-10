@@ -25,6 +25,7 @@ export default function TokenBar({ life, maxLife, shuriken, round, maxRound, onS
         </div>
         <button
           onClick={onShuriken}
+          onTouchEnd={e => { e.preventDefault(); if (canShuriken) onShuriken() }}
           disabled={!canShuriken}
           className={`flex items-center gap-1 px-2 py-1 rounded-lg border transition-all active:scale-95 ${
             canShuriken ? 'border-gold-600 text-gold-400' : 'border-dark-700 text-dark-700 cursor-not-allowed'

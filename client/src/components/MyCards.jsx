@@ -34,11 +34,14 @@ export default function MyCards({ cards, onPlay, onHighlight }) {
 
   // 카드 제출 — 스크롤이면 무시
   function handleHoldEnd(card, e) {
-    // 터치로 10px 이상 이동했으면 스크롤로 간주, 제출 취소
-    if (e?.changedTouches && touchStartY.current[card] !== undefined) {
-      const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current[card])
-      delete touchStartY.current[card]
-      if (dy > 10) { cancelTimers(card); return }
+    // 터치 이벤트: 합성 click 이벤트 방지 (수리검 등 다른 버튼 오작동 방지)
+    if (e?.changedTouches) {
+      e.preventDefault()
+      if (touchStartY.current[card] !== undefined) {
+        const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current[card])
+        delete touchStartY.current[card]
+        if (dy > 10) { cancelTimers(card); return }
+      }
     }
     const shouldPlay = currentLevel.current === 0
     cancelTimers(card)
@@ -72,7 +75,7 @@ export default function MyCards({ cards, onPlay, onHighlight }) {
           <button
             key={card}
             onTouchStart={e => handleHoldStart(card, e)}
-            onTouchEnd={() => handleHoldEnd(card)}
+            onTouchEnd={e => handleHoldEnd(card, e)}
             onMouseDown={e => handleHoldStart(card, e)}
             onMouseUp={() => handleHoldEnd(card)}
             onMouseLeave={() => handleMouseLeave(card)}
