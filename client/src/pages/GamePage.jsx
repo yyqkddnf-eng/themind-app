@@ -178,7 +178,8 @@ export default function GamePage({ initialRoom, nickname, onGameEnd }) {
       <div className="flex flex-col items-center justify-center h-full px-6 text-center gap-3">
         <div className="text-6xl mb-2">🏆</div>
         <div className="text-gold-400 text-2xl font-bold">승리!</div>
-        <div className="text-gray-300 text-sm mb-4">모든 라운드를 클리어했습니다!</div>
+        <div className="text-gray-300 text-sm">모든 라운드를 클리어했습니다!</div>
+        <div className="text-gray-400 text-sm mb-4">우리의 협동심을 테스트해볼 수 있었어요</div>
         <button onClick={handleRestart}
           className="w-full max-w-xs py-4 rounded-xl font-bold text-dark-900 text-lg active:scale-95 transition-all"
           style={{ background: 'linear-gradient(135deg,#d4af37,#f0c040)', boxShadow: '0 4px 20px rgba(212,175,55,0.3)' }}>
