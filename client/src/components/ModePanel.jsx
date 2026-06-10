@@ -50,7 +50,7 @@ function SilentMode({ active, onStart }) {
 }
 
 // ── 타임어택 모드 ──────────────────────────────────────────────
-function TimeAttackMode({ active, onStart, duration = 30 }) {
+function TimeAttackMode({ active, onStart, duration = 150 }) {
   const [progress, setProgress] = useState(100)
   const [urgent, setUrgent] = useState(false)
   const intervalRef = useRef(null)
