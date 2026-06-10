@@ -65,7 +65,7 @@ export default function WaitingPage({ room: initialRoom, nickname, onGameStart, 
       {/* 플레이어 목록 */}
       <div className="mb-4">
         <div className="text-gold-500 text-xs tracking-wider mb-3">
-          플레이어 ({room.players?.length}/4)
+          플레이어 ({room.players?.length}/6)
         </div>
         <div className="flex flex-col gap-2">
           {room.players?.map((p, i) => (
@@ -77,7 +77,7 @@ export default function WaitingPage({ room: initialRoom, nickname, onGameStart, 
               {i === 0 && <span className="ml-auto text-gold-400 text-xs font-medium">방장</span>}
             </div>
           ))}
-          {Array.from({ length: 4 - (room.players?.length || 0) }).map((_, i) => (
+          {Array.from({ length: 6 - (room.players?.length || 0) }).map((_, i) => (
             <div key={i} className="flex items-center gap-3 bg-dark-900 rounded-xl p-3 border border-dark-800 opacity-40">
               <div className="w-8 h-8 rounded-full border border-dashed border-gray-600" />
               <span className="text-gray-500 text-sm">대기 중...</span>

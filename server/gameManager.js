@@ -32,7 +32,7 @@ function joinRoom(code, playerId, nickname) {
   const room = rooms.get(code);
   if (!room) return { error: '방을 찾을 수 없습니다.' };
   if (room.phase === 'playing') return { error: '게임이 이미 진행 중입니다.' };
-  if (room.players.length >= 4) return { error: '방이 꽉 찼습니다.' };
+  if (room.players.length >= 6) return { error: '방이 꽉 찼습니다.' };
   if (room.players.find(p => p.id === playerId)) {
     socketRoomMap.set(playerId, code);
     return { room };
@@ -48,7 +48,7 @@ function startGame(code) {
   const playerCount = room.players.length;
 
   // Life tokens by player count
-  const lifeMap = { 1: 3, 2: 2, 3: 3, 4: 4 };
+  const lifeMap = { 1: 3, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6 };
   const life = lifeMap[playerCount] || 3;
 
   room.phase = 'playing';
