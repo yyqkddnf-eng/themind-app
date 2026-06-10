@@ -14,21 +14,12 @@ const io = new Server(server, {
 });
 
 // Number masking: mask Korean and Arabic numerals in chat
-const numberPatterns = [
-  /\d+/g,
-  /일|이|삼|사|오|육|칠|팔|구|십|백/g,
-  /하나|둘|셋|넷|다섯|여섯|일곱|여덟|아홉|열/g,
-  /스물|서른|마흔|쉰|예순|일흔|여든|아흔/g,
-];
-
+// 아라비아 숫자만 마스킹 (한글 숫자 단어는 제외)
 function maskNumbers(text) {
-  let masked = text;
-  let hasMasked = false;
-  numberPatterns.forEach(pattern => {
-    if (pattern.test(masked)) hasMasked = true;
-    pattern.lastIndex = 0;
-    masked = masked.replace(pattern, '██');
-  });
+  const pattern = /\d+/g;
+  const hasMasked = pattern.test(text);
+  pattern.lastIndex = 0;
+  const masked = text.replace(pattern, '██');
   return { masked, hasMasked };
 }
 

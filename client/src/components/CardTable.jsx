@@ -28,9 +28,21 @@ export default function CardTable({ tableCards }) {
           {/* 마지막 카드 — 크게 + 누가 냈는지 표시 */}
           <div className="flex flex-col items-center gap-1.5">
             <div className="card-premium flex items-center justify-center relative slide-up"
-              style={{ width: 110, height: 155, background: 'linear-gradient(145deg, #0f0f0f, #1c1c1c)' }}>
-              <div className="text-gold-300 font-bold"
-                style={{ fontSize: 52, lineHeight: 1, textShadow: '0 0 20px rgba(212,175,55,0.7)' }}>
+              style={{
+                width: 110, height: 155,
+                background: tableCards[tableCards.length - 1].auto
+                  ? 'linear-gradient(145deg, #1a0000, #2a0a0a)'
+                  : 'linear-gradient(145deg, #0f0f0f, #1c1c1c)',
+                border: tableCards[tableCards.length - 1].auto ? '1.5px solid #e05555' : undefined,
+              }}>
+              <div className="font-bold"
+                style={{
+                  fontSize: 52, lineHeight: 1,
+                  color: tableCards[tableCards.length - 1].auto ? '#f87171' : undefined,
+                  textShadow: tableCards[tableCards.length - 1].auto
+                    ? '0 0 20px rgba(239,68,68,0.7)'
+                    : '0 0 20px rgba(212,175,55,0.7)',
+                }}>
                 {tableCards[tableCards.length - 1].value}
               </div>
               <div className="absolute top-2 left-2.5 text-gold-600 text-sm opacity-60">
@@ -61,9 +73,10 @@ export default function CardTable({ tableCards }) {
               {lastCards.slice(0, -1).map((c, i) => (
                 <div key={i} className="flex flex-col items-center gap-1">
                   <div className="card-premium flex items-center justify-center relative"
-                    style={{ width: 44, height: 62 }}>
-                    <span className="text-gold-500 font-bold text-base">{c.value}</span>
-                    <span className="absolute top-1 left-1 text-gold-700 text-xs opacity-50">{c.value}</span>
+                    style={{ width: 44, height: 62, opacity: c.auto ? 0.6 : 1, border: c.auto ? '1.5px solid #e05555' : undefined }}>
+                    <span className="font-bold text-base" style={{ color: c.auto ? '#f87171' : undefined }}>{c.value}</span>
+                    <span className="absolute top-1 left-1 text-xs opacity-50">{c.value}</span>
+                    {c.auto && <span className="absolute bottom-1 right-1 text-xs" style={{ color: '#f87171', fontSize: 8 }}>💔</span>}
                   </div>
                   <span className="text-gray-500 text-xs text-center leading-none" style={{ maxWidth: 46, wordBreak: 'keep-all' }}>
                     {c.nickname}

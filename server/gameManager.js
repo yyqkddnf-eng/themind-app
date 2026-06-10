@@ -125,7 +125,7 @@ function playCard(code, playerId, card) {
 
     if (lostCards.length > 0) {
       mistake = true;
-      // Remove those lower cards (they are lost)
+      // Remove those lower cards from hands
       lostCards.forEach(({ playerId: pid, card: c }) => {
         const p = room.players.find(pl => pl.id === pid);
         if (p) {
@@ -137,7 +137,16 @@ function playCard(code, playerId, card) {
     }
   }
 
-  // Add card to table
+  // 잃은 카드들을 테이블에 오름차순으로 자동 추가 (플레이어 정보 포함)
+  if (lostCards.length > 0) {
+    const sortedLost = [...lostCards].sort((a, b) => a.card - b.card);
+    sortedLost.forEach(({ playerId: pid, card: c }) => {
+      const p = room.players.find(pl => pl.id === pid);
+      tableCards.push({ value: c, playerId: pid, nickname: p?.nickname || '?', auto: true });
+    });
+  }
+
+  // Add played card to table
   tableCards.push({ value: card, playerId, nickname: player.nickname });
 
   if (mistake) {
