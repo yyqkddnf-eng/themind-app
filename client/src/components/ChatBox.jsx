@@ -5,6 +5,8 @@ const EMOJIS = [
   { emoji: '😰', text: '잠깐만요' },
   { emoji: '👀', text: '눈치 보는 중' },
   { emoji: '🙏', text: '기다려줘' },
+  { emoji: '😂', text: '웃음' },
+  { emoji: '👏', text: '잘했어요~' },
 ]
 
 export default function ChatBox({ messages, onSend }) {
