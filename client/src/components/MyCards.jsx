@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 
-export default function MyCards({ cards, onPlay, onHighlight }) {
+export default function MyCards({ cards, onPlay, onHighlight, otherPlayersWithCards = [] }) {
   const [highlightLevel, setHighlightLevel] = useState(0)
   const holdTimers = useRef({})
   const currentLevel = useRef(0)
@@ -65,10 +65,18 @@ export default function MyCards({ cards, onPlay, onHighlight }) {
       </div>
       <div className="flex gap-2 overflow-x-auto pb-1">
         {cards.length === 0 && (
-          <div className="flex items-center gap-2 py-2">
-            <span className="text-gold-400 animate-pulse text-lg">✦</span>
-            <span className="text-gold-400 text-sm font-medium">모든 카드를 제출했어요!</span>
-            <span className="text-gray-500 text-xs">라운드 클리어 대기 중...</span>
+          <div className="flex flex-col gap-1 py-2">
+            <div className="flex items-center gap-2">
+              <span className="text-gold-400 animate-pulse text-lg">✦</span>
+              <span className="text-gold-400 text-sm font-medium">모든 카드를 제출했어요!</span>
+            </div>
+            {otherPlayersWithCards.length > 0 ? (
+              <span className="text-gray-400 text-xs pl-1">
+                아직 <span className="text-gold-400 font-bold">{otherPlayersWithCards.length}명</span>의 플레이어가 카드를 가지고 있어요
+              </span>
+            ) : (
+              <span className="text-gray-500 text-xs pl-1">라운드 클리어 대기 중...</span>
+            )}
           </div>
         )}
         {cards.map(card => (

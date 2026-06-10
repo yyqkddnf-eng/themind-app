@@ -264,6 +264,7 @@ export default function GamePage({ initialRoom, nickname, onGameEnd }) {
         cards={myCards}
         onPlay={handlePlayCard}
         onHighlight={handleHighlight}
+        otherPlayersWithCards={room.players.filter(p => p.id !== socket.id && (p.cardCount ?? 0) > 0)}
       />
 
       {/* ── 모드 탭 패널 (채팅 위) ── */}
